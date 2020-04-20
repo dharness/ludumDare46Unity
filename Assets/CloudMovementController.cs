@@ -38,31 +38,29 @@ public class CloudMovementController : MonoBehaviour
 
     void Update()
     {
-        if(Input.anyKey || true)
-        {
-            Vector2 mouseMovement = GetMouseMovement();
-            var horz = mouseMovement.x;
-            var vert = mouseMovement.y;
 
-            var rightMovement = right * horz;
-            var upMovement = forward * vert;
-            var heading = Vector3.Normalize(rightMovement + upMovement);
+        Vector2 mouseMovement = GetMouseMovement();
+        var horz = mouseMovement.x;
+        var vert = mouseMovement.y;
 
-            var z = camera.WorldToScreenPoint(transform.position).z;
-            var mousePos = camera.ScreenToWorldPoint(Input.mousePosition + new Vector3(0,0,z));
+        var rightMovement = right * horz;
+        var upMovement = forward * vert;
+        var heading = Vector3.Normalize(rightMovement + upMovement);
 
-            var lastWorldPos = new Vector3(lastMousePos.x, transform.position.y, lastMousePos.z);
-            var currentWorldPos = new Vector3(mousePos.x, transform.position.y, mousePos.z);
+        var z = camera.WorldToScreenPoint(transform.position).z;
+        var mousePos = camera.ScreenToWorldPoint(Input.mousePosition + new Vector3(0,0,z));
 
-            // transform.position = currentWorldPos;
-            // transform.position = transform.position + (currentWorldPos - lastWorldPos);
-            transform.position = new Vector3(
-                transform.position.x + (mousePos.x - lastMousePos.x),
-                transform.position.y,
-                transform.position.z + (mousePos.z - lastMousePos.z)
-            );
+        var lastWorldPos = new Vector3(lastMousePos.x, transform.position.y, lastMousePos.z);
+        var currentWorldPos = new Vector3(mousePos.x, transform.position.y, mousePos.z);
 
-            lastMousePos = mousePos;
-        }
+        // transform.position = currentWorldPos;
+        // transform.position = transform.position + (currentWorldPos - lastWorldPos);
+        transform.position = new Vector3(
+            transform.position.x + (mousePos.x - lastMousePos.x),
+            transform.position.y,
+            transform.position.z + (mousePos.z - lastMousePos.z)
+        );
+
+        lastMousePos = mousePos;
     }
 }

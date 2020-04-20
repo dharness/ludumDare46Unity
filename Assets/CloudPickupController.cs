@@ -1,17 +1,16 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class CloudPickupController : MonoBehaviour
 {
+    public InventoryManager inventoryManager;
+    public CloudItemHolder cloudItemHolder;
+
     public Material highlightMateral;
     Material _selectionDefaultMaterial;
     Transform _selection;
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
 
     // Update is called once per frame
     void Update()
@@ -21,7 +20,9 @@ public class CloudPickupController : MonoBehaviour
         {
             if(_selection != null)
             {
-                Destroy(_selection.gameObject);
+                inventoryManager.AddItem(_selection.transform);
+                cloudItemHolder.AddItem(_selection.gameObject);
+                // Destroy(_selection.gameObject);
                 _selection = null;
             }
         }
