@@ -8,7 +8,7 @@ public class CloudMovementController : MonoBehaviour
 
     Vector3 movement, forward, right;
     float speed = 10;
-    Vector2 lastMousePos;
+    Vector3 lastMousePos;
     float lastZ;
 
     void Start()
@@ -19,10 +19,10 @@ public class CloudMovementController : MonoBehaviour
         right = Quaternion.Euler(new Vector3(0f, 90f, 0f)) * forward;
 
         // Cursor.lockState = CursorLockMode.Locked;
-        // Cursor.lockState = CursorLockMode.Locked;
+        Cursor.lockState = CursorLockMode.Confined;
         Cursor.visible = false;
-        lastMousePos = Input.mousePosition;
-        lastZ = camera.WorldToScreenPoint(transform.position).z;
+        var z = camera.WorldToScreenPoint(transform.position).z;
+        lastMousePos = camera.ScreenToWorldPoint(Input.mousePosition + new Vector3(0,0, z));
     }
 
     Vector2 GetMouseMovement()
@@ -40,8 +40,6 @@ public class CloudMovementController : MonoBehaviour
     {
         if(Input.anyKey || true)
         {
-            // var horz = Input.GetAxis("Horizontal");
-            // var vert = Input.GetAxis("Vertical");
             Vector2 mouseMovement = GetMouseMovement();
             var horz = mouseMovement.x;
             var vert = mouseMovement.y;
@@ -50,12 +48,19 @@ public class CloudMovementController : MonoBehaviour
             var upMovement = forward * vert;
             var heading = Vector3.Normalize(rightMovement + upMovement);
 
-            // var goingForwardAmount = Vector3.Magnitude(forward - heading);
-            // var forwardness = (1 + Mathf.Abs(vert)); 
-            // transform.position = transform.position + (heading * speed * Time.deltaTime);
             var z = camera.WorldToScreenPoint(transform.position).z;
             var mousePos = camera.ScreenToWorldPoint(Input.mousePosition + new Vector3(0,0,z));
-            transform.position = new Vector3(mousePos.x, transform.position.y, mousePos.z);
+
+            var lastWorldPos = new Vector3(lastMousePos.x, transform.position.y, lastMousePos.z);
+            var currentWorldPos = new Vector3(mousePos.x, transform.position.y, mousePos.z);
+
+            // transform.position = currentWorldPos;
+            // transform.position = transform.position + (currentWorldPos - lastWorldPos);
+            transform.position = new Vector3(
+                transform.position.x + (mousePos.x - lastMousePos.x),
+                transform.position.y,
+                transform.position.z + (mousePos.z - lastMousePos.z)
+            );
 
             lastMousePos = mousePos;
         }
