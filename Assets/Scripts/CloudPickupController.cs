@@ -7,25 +7,41 @@ public class CloudPickupController : MonoBehaviour
 {
     public InventoryManager inventoryManager;
     public CloudItemHolder cloudItemHolder;
+    public CapsuleCollider collider;
 
     public Material highlightMateral;
     Material _selectionDefaultMaterial;
     Transform _selection;
+    Transform flyingItem;
+    List<Transform> _grabbables = new List<Transform>();
 
     // Update is called once per frame
     void Update()
     {
         ManageSelections();
-        if (Input.GetMouseButtonDown(0))
+
+        if(_selection != null)
         {
-            if(_selection != null)
+            var selectionRB =  _selection.GetComponent<Rigidbody>();
+            if (Input.GetMouseButton(0))
             {
-                inventoryManager.AddItem(_selection.transform);
-                cloudItemHolder.AddItem(_selection.gameObject);
-                // Destroy(_selection.gameObject);
-                _selection = null;
+                selectionRB.isKinematic = true;
+                selectionRB.MovePosition( _selection.position + new Vector3(0,0.07f,0));
+                flyingItem = _selection;
+            } else if( flyingItem != null) {
+                DropItem(flyingItem);
             }
         }
+        else if(flyingItem != null) {
+            DropItem(flyingItem);
+        }
+    }
+
+    void DropItem(Transform item)
+    {
+        var rb = item.GetComponent<Rigidbody>();
+        rb.isKinematic = false;
+        rb.freezeRotation = false;
     }
 
     void ManageSelections()
@@ -35,10 +51,10 @@ public class CloudPickupController : MonoBehaviour
             var selectionRenderer = _selection.GetComponent<Renderer>();
             selectionRenderer.material = _selectionDefaultMaterial;
             _selection = null;
+          
         }
 
         RaycastHit hit;
-        // Does the ray intersect any objects excluding the player layer
         int layerMask = 1 << 9;
         if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.down), out hit, Mathf.Infinity, layerMask))
         {

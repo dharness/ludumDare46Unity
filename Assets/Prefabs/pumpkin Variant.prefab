@@ -106,7 +106,7 @@ PrefabInstance:
     - target: {fileID: -927199367670048503, guid: 5c5e7c42814cf824aa6096fe2df76f28,
         type: 3}
       propertyPath: m_Name
-      value: pumpkin Variant (1)
+      value: pumpkin Variant
       objectReference: {fileID: 0}
     - target: {fileID: -927199367670048503, guid: 5c5e7c42814cf824aa6096fe2df76f28,
         type: 3}

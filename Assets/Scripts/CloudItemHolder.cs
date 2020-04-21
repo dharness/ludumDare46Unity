@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 public class CloudItemHolder : MonoBehaviour
 {
@@ -22,9 +23,11 @@ public class CloudItemHolder : MonoBehaviour
     public void AddItem(GameObject item)
     {
         this.items.Add(item);
-        item.transform.position = this.transform.position;
-        item.transform.parent = this.transform;
+        // item.transform.parent = this.transform;
+        item.transform.DOMove(this.transform.position, 1f);
+        // item.transform.position = this.transform.position;
         item.GetComponent<Rigidbody>().isKinematic = true;
+        
     }
 
     public void DropItem(GameObject item)

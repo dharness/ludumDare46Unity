@@ -8,7 +8,8 @@ public class GrabbableObject : MonoBehaviour
     void Start()
     {
         Rigidbody rb = gameObject.AddComponent(typeof(Rigidbody)) as Rigidbody;
-        rb.isKinematic = true;
+        rb.isKinematic = false;
+        rb.freezeRotation = true;
         
     }
 
